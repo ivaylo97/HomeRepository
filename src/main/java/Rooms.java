@@ -3,7 +3,7 @@ public class Rooms
 	static int numberOfCreatedRooms = -1;
 	private int roomNumber;
 	private boolean isBooked;
-//------------------------------------------
+
 	/**
 	 * Constructor initializing the members of the Rooms class
 	 */
@@ -12,7 +12,7 @@ public class Rooms
 		numberOfCreatedRooms++ ;
 		roomNumber = numberOfCreatedRooms;
 	}
-//------------------------------------------
+
 	/**
 	 * numberOfCreatedRooms is a static member of the Rooms class
 	 * it's purpose is to contain the absolute number of created rooms
@@ -24,7 +24,7 @@ public class Rooms
 		if(numberOfCreatedRooms < 0 )
 			numberOfCreatedRooms = 0 ;
 	}
-//------------------------------------------
+
 	/**
 	 * This method checks whether the isBooked (which is a testament of whether a room is free or not)
 	 * and return a boolean value as an answer
@@ -36,7 +36,7 @@ public class Rooms
 	public boolean isTaken() {
 		return isBooked;
 	}
-//------------------------------------------
+
 	/**
 	 * This method raises the isBooked  flag of a specific room
 	 */
@@ -46,7 +46,7 @@ public class Rooms
 		else
 			System.out.println("The room is already taken");
 	}
-//------------------------------------------
+
 	/**
 	 * This method sets the isBooked of a specific room to false (a.k.a Not taken)
 	 */

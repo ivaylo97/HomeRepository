@@ -7,30 +7,30 @@ public class Hotel {
 	public ArrayList<Rooms> listOfRooms;
 	static int numberOfRooms = -1;
 
-	//-------------------------------------------
+
 	Hotel() {
 		hotelName = "\0"; // Or "Unnamed" ??
 		listOfRooms = new ArrayList<Rooms>();
 		InitNumberOfRooms();
 	}
 
-	//-------------------------------------------
+
 	public int getNumberOfRooms() {
 		return numberOfRooms;
 	}
 
-	//-------------------------------------------
+
 	void InitNumberOfRooms() {
 		if (numberOfRooms < 0)
 			numberOfRooms = 0;
 	}
 
-	//--------------------------------------------
+
 	public void addNewRoom(int idx, Rooms NewRoom) {
 		listOfRooms.add(idx, NewRoom);
 		numberOfRooms++;
 	}
-//----------------------------------------------
+
 
 	/**
 	 * Returns the Hotel's name
@@ -40,7 +40,7 @@ public class Hotel {
 	public String getHotelName() {
 		return hotelName;
 	}
-//-------------------------------------------
+
 
 	/**
 	 * This variable is used as a new value for the Hotel Name member.
@@ -50,7 +50,7 @@ public class Hotel {
 	public void setHotelName(String newHotelName) {
 		hotelName = newHotelName;
 	}
-//-------------------------------------------
+
 
 	/**
 	 * Searches the list of rooms for free ones , if there are any it returns them in an arraylist format.
