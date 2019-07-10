@@ -13,15 +13,14 @@ public class HotelServiceApplication {
 
 
         transylvania.setHotelName("transylvania");
-        Ivan.setHotelName("transylvania");
+        Ivan.setHotel(transylvania);
         Ivan.managedHotel = transylvania ;
         transylvania.addNewRoom(0,room101);
         transylvania.addNewRoom(1,room102);
 
-        Ivan.setHotelName(transylvania.getHotelName());
 
         tempList=Ivan.managedHotel.searchForFreeRooms();
-        if(tempList != null) {
+        if(!tempList.isEmpty()) {
 			tempList.get(0).BookRoom();
 		}
 

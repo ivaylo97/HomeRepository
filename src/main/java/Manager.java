@@ -8,7 +8,7 @@ public class Manager {
      * Returns the name of the hotel that is being managed by the manager.
      * @return
      */
-    String getHotel() {
+    String getHotelName() {
           return hotelName;
     }
 
@@ -21,13 +21,18 @@ public class Manager {
         return managerName;
     }
 
+    void setManagerName(String newManagerName) {
+    	managerName = newManagerName ;
+	}
+
     /**
-     * This method takes a String as a formal parameter which is later used to set the value of the
-     * variable.
-     * @param newHotelName
+     * This method takes a Hotel object as a formal parameter which is later used to set the values of the managedHotel
+	 * and the hotelName variables.
+     * @param newHotel
      */
-    public void setHotelName(String newHotelName) {
-        hotelName = newHotelName ;
+    public void setHotel(Hotel newHotel) {
+		managedHotel = newHotel ;
+        hotelName = newHotel.getHotelName() ;
     }
 
     /**

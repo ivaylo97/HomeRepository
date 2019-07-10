@@ -5,11 +5,11 @@ public class Hotel {
 
 	private String hotelName;
 	public ArrayList<Rooms> listOfRooms;
-	static int numberOfRooms = -1;
+	static int numberOfRooms = 0;
 
 
 	Hotel() {
-		hotelName = "\0"; // Or "Unnamed" ??
+		hotelName = ""; // Or "Unnamed" ??
 		listOfRooms = new ArrayList<Rooms>();
 		InitNumberOfRooms();
 	}
@@ -21,8 +21,8 @@ public class Hotel {
 
 
 	void InitNumberOfRooms() {
-		if (numberOfRooms < 0)
-			numberOfRooms = 0;
+		if (numberOfRooms == 0)
+			numberOfRooms = 1;
 	}
 
 
@@ -59,20 +59,13 @@ public class Hotel {
 	 * @return
 	 */
 	public ArrayList<Rooms> searchForFreeRooms() {
-		boolean isNotEmpty = false;
 		ArrayList<Rooms> temporaryList = new ArrayList<Rooms>();
 		for (int roomCounter = 0; roomCounter < Rooms.numberOfCreatedRooms; roomCounter++) {
 			if (listOfRooms.get(roomCounter).isTaken()) {
-				isNotEmpty = true;
 				temporaryList.add(listOfRooms.get(roomCounter));
 			}
 		}
-
-		if (isNotEmpty) {
-			return temporaryList;
-		}else {
-			return null;
-		}
+		return temporaryList;
 	}
 }
 

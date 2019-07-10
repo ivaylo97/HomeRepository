@@ -11,6 +11,7 @@ public class Rooms
 		setNumberOfCreatedRooms();
 		numberOfCreatedRooms++ ;
 		roomNumber = numberOfCreatedRooms;
+		isBooked = false ;
 	}
 
 	/**
@@ -25,13 +26,18 @@ public class Rooms
 			numberOfCreatedRooms = 0 ;
 	}
 
+	int getNumberOfCreatedRooms(){
+		return numberOfCreatedRooms;
+	}
+
+
 	/**
 	 * This method checks whether the isBooked (which is a testament of whether a room is free or not)
 	 * and return a boolean value as an answer
 	 */
 	/**
 	 * Returns a value based on whether a rooms is taken or not
-	 * @return
+	 * @return isBooked
 	 */
 	public boolean isTaken() {
 		return isBooked;
