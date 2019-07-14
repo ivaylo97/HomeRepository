@@ -3,42 +3,52 @@
 import java.time.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 //Just hotfix test
 
 public class HotelServiceApplication {
-    public static void main(String[] args)
-    {
 
-        Manager Ivan = new Manager();
-        Hotel transylvania = new Hotel();
-        Rooms room101 = new Rooms();
-        Rooms room102 = new Rooms();
-        ArrayList<Rooms> tempList ;
+	public static void main(String[] args) {
+		Iterator<Bookings> testiterator ;
+		Bookings tempBooking ;
 
+		Manager Ivan = new Manager();
+		Hotel transylvania = new Hotel();
+		Rooms room101 = new Rooms();
+		Rooms room102 = new Rooms();
 
-        transylvania.setHotelName("transylvania");
-        Ivan.setHotel(transylvania);
-        Ivan.managedHotel = transylvania ;
-        transylvania.addNewRoom(0,room101);
-        transylvania.addNewRoom(1,room102);
+		Rooms room103 = new Rooms();
+		ArrayList<Rooms> tempList;
 
+		room101.setCommodities(1, 1, 1);
+		room102.setCommodities(3, 1, 2);
+		room103.setCommodities(2,1,1);
 
+		transylvania.setHotelName("transylvania");
+		Ivan.setHotel(transylvania);
+		Ivan.managedHotel = transylvania;
+		transylvania.addNewRoom(0, room101);
+		transylvania.addNewRoom(1, room102);
+		transylvania.addNewRoom(2, room103);
 
-        for(int generalPurposeCounter = 0 ,numberOfRooms = transylvania.getNumberOfRooms();  generalPurposeCounter < numberOfRooms ; generalPurposeCounter ++ ) {
-            Ivan.managedHotel.listOfRooms.get(generalPurposeCounter).removeAllBookings();
-        }
+		Ivan.bookRoom("1111111111", configureDate("2019-07-20"), configureDate("2019-07-25"), 2, 5);
+		Ivan.bookRoom("2222222222", configureDate("2019-07-22"), configureDate("2019-07-23"), 1, 1);
+		Ivan.bookRoom("4444444444",configureDate("2019-07-19"),configureDate("2019-07-21"),2,2);
 
-/*
-       LocalDate test = LocalDate.parse("2000-10-25");
-       LocalDate testComparison = LocalDate.parse("2000-10-25");
-       LocalDate testComparison2 = LocalDate.parse("2001-10-25");
-       if(test.equals(testComparison)){
-       	System.out.println(testComparison);
-	   }
-       if(testComparison.isBefore(testComparison2)){
-       	System.out.println(testComparison+"is before"+testComparison2);
-	   }
-*/
-    }
+		for (int generalPurposeCounter = 0, numberOfRooms = transylvania.getNumberOfRooms(); generalPurposeCounter < numberOfRooms; generalPurposeCounter++) {
+			Ivan.managedHotel.listOfRooms.get(generalPurposeCounter).removeAllBookings();
+		}
+	}
+
+	/**
+	 * Helper method used to parse a string to a local date.
+	 * @param date
+	 * String type variable which represents the date that is to be parsed.
+	 * @return LocalDate.parse(date);
+	 * Returns the date in local date format.
+	 */
+	static LocalDate configureDate(String date){
+		return LocalDate.parse(date);
+	}
 
 }

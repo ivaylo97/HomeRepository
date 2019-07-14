@@ -4,11 +4,14 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Date;
 public class Rooms {
-	static private int roomNumber= -1 ;
-	//private boolean isBooked ; Removed because of task 2 !
+	private int roomNumber= -1 ;
+	private int numberOfBeds ;
+	private int numberOfShowers ;
+	private int numberOfToilets ;
 	Set<AbstractCommodity> commodities ;
-	Set<Date> maintenanceDates ;
+	Set<LocalDate> maintenanceDates ;
 	Set<Bookings> bookingsSet ;
+
 
 	Iterator<AbstractCommodity> commodityIterator ;
 	/**
@@ -16,7 +19,7 @@ public class Rooms {
 	 */
 	Rooms() {
 		commodities = new HashSet<AbstractCommodity>();
-		maintenanceDates = new HashSet<Date>();
+		maintenanceDates = new HashSet<LocalDate>();
 		bookingsSet = new HashSet<Bookings>();
 		initNumberOfRooms();
 
@@ -39,20 +42,17 @@ public class Rooms {
 			roomNumber = 0 ;
      }
 
-
-
 	/**
 	 * This method invokes all of the commodities available for the maintenance of the room.
-	 * It take a Date object as a formal parameter and uses it to create a log of when the room was
-	 * under maintenance.
 	 * @param newMaintenanceDate
+	 * A Date typed object that represents a date at which the room is under maintenance.
 	 */
-	void  roomMaintenance(Date newMaintenanceDate){
+	void  roomMaintenance(LocalDate newMaintenanceDate){
 		commodityIterator = commodities.iterator();
 		while(commodityIterator.hasNext()){
 			commodityIterator.next().Prepare();
-			maintenanceDates.add(newMaintenanceDate);
 		}
+		maintenanceDates.add(newMaintenanceDate);
 	}
 
 	/**
@@ -61,32 +61,47 @@ public class Rooms {
 	 * that is to be booked.
 	 * It later traverses the booking set and checks whether the selected dates are already booked by checking whether the
 	 * starting/end dates are already present in the booking set.
-	 * @param guestEGN
-	 * @param fromDate
-	 * @param toDate
-	 * @param roomToBeBooked
+	 * Returns an asnwer on whether the booking was successful.
+	 * 	@param guestEGN
+	 * 	newGuestEGN is a string type variable , containing the guest's EGN number.
+	 * 	@param fromDate
+	 * 	fromDate is a LocalDate type variable which contains the requested booking's starting date.
+	 * 	@param toDate
+	 * 	toDate is a LocalDate type variable which contains the requested booking's end date .
+	 *  @param roomToBeBooked
+	 * 	roomToBeBooked is an object which represents the room that is being booked.
+	 * 	@param numberOfDays
+	 *  numberOfDays is an integer type variable which represents the number of days for which the room will be booked.
 	 */
-	void createBooking(String guestEGN, LocalDate fromDate, LocalDate toDate , Rooms roomToBeBooked){
-		Bookings temporaryObject = new Bookings();
+	boolean createBooking(String guestEGN, LocalDate fromDate, LocalDate toDate , Rooms roomToBeBooked , int numberOfDays){
+		Bookings objectToBeBooked = new Bookings();
+		Bookings temporaryObject ;
 		Iterator<Bookings> temporaryIterator = bookingsSet.iterator();
-		temporaryObject.updateRoom(guestEGN,fromDate,toDate,roomToBeBooked);
-		LocalDate temporaryObjectStartDate = temporaryObject.getStartDate();
-		LocalDate temporaryObjectEndDate = temporaryObject.getEndDate();
+		LocalDate objectToBeBookedStartDate = objectToBeBooked.getStartDate();
+		LocalDate objectToBeBookedEndDate = objectToBeBooked.getEndDate();
+
+		objectToBeBooked.updateRoom(guestEGN,fromDate,toDate,roomToBeBooked,numberOfDays);
+
+
 
 		while(temporaryIterator.hasNext()){
-			if(temporaryObjectStartDate.isAfter(temporaryIterator.next().getStartDate())) {
-				if (temporaryObjectStartDate.isBefore(temporaryIterator.next().getEndDate())) {
+
+			temporaryObject = temporaryIterator.next();
+
+			if(objectToBeBookedStartDate.isAfter(temporaryObject.getStartDate())) {
+				if (objectToBeBookedStartDate.isBefore(temporaryObject.getEndDate())) {
 					System.out.println("The Starting date of your booking is already taken.");
-					return;
+					return false;
 				}
 			} else {
-				if(temporaryObjectEndDate.isAfter(temporaryIterator.next().getStartDate())){
+				if(objectToBeBookedEndDate.isAfter(temporaryObject.getStartDate())){
 					System.out.println("The end date of your booking overlaps with another booking's days");
-					return;
+					return false;
 				}
 			}
 		}
-		bookingsSet.add(temporaryObject);
+		bookingsSet.add(objectToBeBooked);
+		return true;
 	}
 
 	/**
@@ -123,18 +138,27 @@ public class Rooms {
 	 * It traverses the booking set and compares the dates,which have been passed as parameters , with those that are
 	 * present in a member of the set.If the comparison results in a true value the set member is removed.
 	 * @param fromDate
+	 * LocalDate type variable  that represents the starting date of the booking that is to be removed.
 	 * @param toDate
+	 * LocalDate type variable  that represents the end date of the booking that is to be removed.
+	 * @param guestEGN
+	 * String type variable which contains the EGN of the guest which booked the room.
 	 */
 
-	void removeBooking(LocalDate fromDate,LocalDate toDate ){
+	boolean removeBooking(String guestEGN,LocalDate fromDate,LocalDate toDate ){
 		Iterator<Bookings> temporaryIterator = bookingsSet.iterator();
 		Bookings tempBooking ;
 		while(temporaryIterator.hasNext()){
 			tempBooking = temporaryIterator.next();
-			if(tempBooking.getStartDate().equals(fromDate) && tempBooking.getEndDate().equals(toDate)){
-				temporaryIterator.remove();
+			if(guestEGN.equals(tempBooking.getGuestEGN())) {
+				if (tempBooking.getStartDate().equals(fromDate) && tempBooking.getEndDate().equals(toDate)) {
+					temporaryIterator.remove();
+					System.out.println("Booking remove successful!");
+					return  true ;
+				}
 			}
 		}
+		return false ;
 	}
 
 	/**
@@ -144,29 +168,61 @@ public class Rooms {
 		Iterator<Bookings> temporaryIterator = bookingsSet.iterator();
 		Bookings tempBooking ;
 		while ((temporaryIterator.hasNext())){
+			temporaryIterator.next();
 			temporaryIterator.remove();
+
 		}
 	}
 
 	/**
 	 * This method takes number of beds/showers/toilets in a single room , and adds them to the commodities.
-	 * @param numberOfBeds
-	 * @param numberOfShowers
-	 * @param numberOfToilets
+	 * @param newNumberOfBeds
+	 * An int type variable ,used to set the number of beds present in the room,also to add that number of beds into
+	 * the commodities set.
+	 * @param newNumberOfShowers
+	 *  An int type variable ,used to set the number of showers present in the room,also to add that number of showers
+	 *  into the commodities set.
+	 * @param newNumberOfToilets
+	 * An int type variable , used to set the number of toilets present in the room , also to to add that number of
+	 * toilets into the commodities set.
 	 */
-	void setCommodities(int numberOfBeds , int numberOfShowers , int numberOfToilets){
-		int[] commoditiesArray = {numberOfBeds,numberOfShowers,numberOfToilets};
-		while(commoditiesArray[0] > 0){
+	void setCommodities(int newNumberOfBeds , int newNumberOfShowers , int newNumberOfToilets){
+		numberOfBeds = newNumberOfBeds ;
+		numberOfShowers = newNumberOfShowers ;
+		numberOfToilets = newNumberOfToilets ;
+
+		for(int bedCounter = 0 ; bedCounter < numberOfBeds ; bedCounter ++){
 			commodities.add(new Bed());
-			commoditiesArray[0] --;
 		}
-		while(commoditiesArray[1] > 0){
+		for(int showerCounter = 0 ; showerCounter < numberOfShowers ; showerCounter ++){
 			commodities.add(new Shower());
-			commoditiesArray[1] --;
 		}
-		while (commoditiesArray[2] > 0){
+		for(int toiletCounter = 0 ; toiletCounter < numberOfToilets ; toiletCounter ++){
 			commodities.add(new Toilet());
-			commoditiesArray[2] -- ;
 		}
+	}
+
+	/**
+	 * Returns the number of beds in the room.
+	 * @return numberOfBeds
+	 */
+	int getNumberOfBeds(){
+		return numberOfBeds ;
+	}
+
+	/**
+	 * Returns the number of showers in the room.
+	 * @return numberOfShowers
+	 */
+	int getNumberOfShowers(){
+		return numberOfShowers ;
+	}
+
+	/**
+	 * Returns the number of toilets in the room.
+	 * @return numberOfToilets
+	 */
+	int getNumberOfToilets(){
+		return numberOfToilets ;
 	}
 }
